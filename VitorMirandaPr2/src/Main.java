@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,16 +14,28 @@ public class Main {
         final int RECAUDACION = 6;
         final int SALIR = 0;
 
-        //menu
         Scanner scanner = new Scanner(System.in);
+
+        //menu
         System.out.println("----------------------------");
         System.out.println("Beienvenido al Cine Vitor!");
         System.out.println("---------------------------");
 
-        Sala sala1 = new Sala("5", 5, 5);
-        Sala sala2 = new Sala("10", 7, 4);
+
+
+        Sala sala1 = new Sala("Sala Comun 5", 5, 5); //creating sala 1
+        Sala sala2 = new Sala("Sala VIP 10", 7, 4); //creating sala 2
+
+        Cine cine1 = new Cine("Cine Vitor", "Linares"); //creating cine 1
+        cine1.AgregarSala(sala1); //adding "sala 1" to cine 1
+        cine1.AgregarSala(sala2); //adding "sala 2" to cine 1
+
+        String title, gender;
+        int duration, nSala;
+        ArrayList<Sala> salas = new ArrayList<Sala>();
 
         do{
+            //user method choice
             System.out.println("Qué quiere hacer hoy?");
             System.out.println("1. anadir pelicula");
             System.out.println("2. eliminar pelicula");
@@ -32,8 +46,46 @@ public class Main {
             System.out.println("0. salir");
             option = scanner.nextInt();
 
+            HashMap<Integer, String> movieGender = new HashMap<Integer, String>(); //key and value for Genders
+            movieGender.put(1, "Drama");
+            movieGender.put(2, "Terror");
+            movieGender.put(3, "Comédia");
+            movieGender.put(4, "Ficcion");
+
             switch (option) {
                 case ANADIR:
+
+                    System.out.println("Escriba el titulo de la pelicula:"); //title
+                    title = scanner.next();
+
+                    System.out.println("Escriba el genero de la pelicula:"); //gender
+                    System.out.println("1. Drama");
+                    System.out.println("2. Terror");
+                    System.out.println("3. Comédia");
+                    System.out.println("4. Ficción");
+                    gender = movieGender.get(scanner.nextInt());
+
+                    System.out.println(gender);
+
+                    System.out.println("Escriba la duraccion de la pelicula (minutos):"); //time
+                    duration = scanner.nextInt();
+
+                    Pelicula pelicula = new Pelicula(title, gender, duration);//Creating the movie
+
+                    //show disponible rooms
+                    System.out.println("Salas disponibles:"); 
+                    salas = cine1.getSalas();
+
+                    for (int i = 0; i < salas.size(); i++) {
+                        if (salas.get(i).getPelicula() == null) { //if the room has not a movie
+                            System.out.println((i+1) + "." + salas.get(i).getNumero());
+                        }
+                    }
+
+                    System.out.println("Cual sala le gustaria anadir la pelicula? ");
+                    nSala = scanner.nextInt();
+
+                    cine1.AgregarPelicula(salas.get(nSala-1).getNumero(), pelicula);
 
                     break;
                 case ELIMINAR:
