@@ -13,6 +13,14 @@ public class Sala {
 
     }
 
+    public int getButaca() {
+        return butaca;
+    }
+
+    public int getFila() {
+        return fila;
+    }
+
     public String getNumero(){
         return this.numero;
     }

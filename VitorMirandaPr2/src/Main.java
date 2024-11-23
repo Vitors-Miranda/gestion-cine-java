@@ -26,13 +26,17 @@ public class Main {
         Sala sala1 = new Sala("Sala Comun 5", 5, 5); //creating sala 1
         Sala sala2 = new Sala("Sala VIP 10", 7, 4); //creating sala 2
 
-        Cine cine1 = new Cine("Cine Vitor", "Linares"); //creating cine 1
+        Cine cine1 = new Cine("Cine Vitor y Pedro", "Linares"); //creating cine 1
         cine1.AgregarSala(sala1); //adding "sala 1" to cine 1
         cine1.AgregarSala(sala2); //adding "sala 2" to cine 1
 
         String title, gender;
-        int duration, nSala;
+        int duration, nSala, nSesion, asientosLibres;
+        float precio, ocupacion;
+        String horaSesion;
+
         ArrayList<Sala> salas = new ArrayList<Sala>();
+        ArrayList<Sesion> sesiones = new ArrayList<Sesion>();
 
         do{
             //user method choice
@@ -58,7 +62,7 @@ public class Main {
                     System.out.println("1. Drama");
                     System.out.println("2. Terror");
                     System.out.println("3. Comédia");
-                    System.out.println("4. Ficción");
+                    System.out.println("4. Ciencia Ficción");
                     gender = movieGender[(scanner.nextInt()-1)];
 
                     System.out.println(gender);
@@ -85,10 +89,67 @@ public class Main {
 
                     break;
                 case ELIMINAR:
+                    System.out.println("Películas disponibles: ");
+                    salas = cine1.getSalas();
+                    for (int i = 0; i < salas.size(); i++) {
+                        if (salas.get(i).getPelicula() != null) { //if the room has a movie
+                            System.out.println((i+1)+". Película: " + salas.get(i).getPelicula().getTitulo() + " (" + salas.get(i).getNumero()  + ")"  );
+                        }
+                    }
+                    System.out.println("\nCuál película deseas eliminar?");
+                    nSala = scanner.nextInt();
+                    cine1.EliminarPelicula(salas.get(nSala-1).getNumero());
+
                     break;
                 case CREAR:
+                    //show disponible rooms
+                    System.out.println("Salas disponibles:");
+                    salas = cine1.getSalas();
+
+                    for (int i = 0; i < salas.size(); i++) {
+                        if (salas.get(i).getPelicula() != null) { //if the room has not a movie
+                            System.out.println((i+1) + "." + salas.get(i).getNumero());
+                        }
+                    }
+
+                    System.out.println("Cual sala le gustaria crear sesion? ");
+                    nSala = scanner.nextInt();
+
+                    System.out.println("Cual precio de la sesion? ");
+                    precio = scanner.nextFloat();
+
+                    System.out.println("Cual hora de la sesion? ");
+                    horaSesion = scanner.next();
+
+                    System.out.println(salas.get(nSala-1).getNumero());
+
+                    cine1.CrearSession(precio, horaSesion, salas.get(nSala-1).getNumero());
+
                     break;
                 case MOSTRAR:
+                    //show disponible sessions
+                    System.out.println("Sesiones disponibles:");
+                    sesiones = cine1.getSesiones();
+
+                    for (int i = 0; i < sesiones.size(); i++) {
+                            System.out.println((i+1) + "." + sesiones.get(i).getSala());
+                    }
+
+                    System.out.println("Selecione una sesion: ");
+                    nSesion = scanner.nextInt();
+                    String sesionGrafica = sesiones.get(nSesion-1).obtenerEstadoSesion();
+
+                    String[] asientos = sesionGrafica.split(",");
+                    for (String fila : asientos) {
+                        System.out.println(fila);
+                    }
+
+                    asientosLibres = sesiones.get(nSesion-1).obtenerAsientosLibres();
+                    ocupacion = sesiones.get(nSesion-1).obtenerPorcentajeOcupacion();
+
+                    System.out.println("Asientos Libres: " + asientosLibres);
+                    System.out.println("Porcentaje de Ocupacion: " + ocupacion);
+
                     break;
                 case COMPRAR:
                     break;
