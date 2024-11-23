@@ -18,7 +18,7 @@ public class Main {
 
         //menu
         System.out.println("----------------------------");
-        System.out.println("Beienvenido al Cine Vitor!");
+        System.out.println("Bienvenido al Cine Vitor!");
         System.out.println("---------------------------");
 
 
@@ -36,7 +36,7 @@ public class Main {
 
         do{
             //user method choice
-            System.out.println("Qué quiere hacer hoy?");
+            System.out.println("\nQué quiere hacer hoy?");
             System.out.println("1. anadir pelicula");
             System.out.println("2. eliminar pelicula");
             System.out.println("3. crear sesion");
@@ -58,7 +58,7 @@ public class Main {
                     System.out.println("1. Drama");
                     System.out.println("2. Terror");
                     System.out.println("3. Comédia");
-                    System.out.println("4. Ficción");
+                    System.out.println("4. Ciencia Ficción");
                     gender = movieGender[(scanner.nextInt()-1)];
 
                     System.out.println(gender);
@@ -78,18 +78,35 @@ public class Main {
                         }
                     }
 
-                    System.out.println("Cual sala le gustaria anadir la pelicula? ");
+                    System.out.println("En cuál sala le gustaria anadir la pelicula? ");
                     nSala = scanner.nextInt();
 
                     cine1.AgregarPelicula(salas.get(nSala-1).getNumero(), pelicula);
 
                     break;
                 case ELIMINAR:
+
+                    System.out.println("Películas disponibles: ");
+
+                    salas = cine1.getSalas();
+
+                    for (int i = 0; i < salas.size(); i++) {
+                        if (salas.get(i).getPelicula() != null) { //if the room has a movie
+                            System.out.println((i+1)+". Película: " + salas.get(i).getPelicula().getTitulo() + " (" + salas.get(i).getNumero()  + ")"  );
+                        }
+                    }
+
+                    System.out.println("\nCuál película deseas eliminar?");
+                    nSala = scanner.nextInt();
+                    cine1.EliminarPelicula(salas.get(nSala-1).getNumero());
+
+
                     break;
                 case CREAR:
                     break;
                 case MOSTRAR:
                     break;
+                    
                 case COMPRAR:
                     break;
                 case RECAUDACION:

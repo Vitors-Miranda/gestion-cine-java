@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+
 public class Sala {
     private String numero;
     private int fila;
     private int butaca;
     private Cine cine;
     private Pelicula pelicula;
+
 
     public Sala(String numero, int fila, int butaca) {
         this.numero = numero;
@@ -22,6 +25,8 @@ public class Sala {
     public void setPelicula(Pelicula pelicula){
        this.pelicula = pelicula;
     }
+
+
     public boolean estaVacia(){
         return false;
     }

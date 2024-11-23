@@ -25,7 +25,12 @@ public class Cine {
         }
 
     }
-    public  void EliminarPelicula(String nSala, Pelicula pelicula){
+    public  void EliminarPelicula(String nSala){
+        for (Sala sala : this.salas) {
+            if (Objects.equals(sala.getNumero(), nSala)) {
+              sala.setPelicula(null);
+            }
+        }
 
     }
     public  void CrearSession(float precio, String hora,  String nSala){

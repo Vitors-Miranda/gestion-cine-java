@@ -9,4 +9,7 @@ public class Pelicula {
         this.duration = duration;
         this.genero = genero;
     }
+
+    public String getTitulo(){return this.titulo;}
+
 }
