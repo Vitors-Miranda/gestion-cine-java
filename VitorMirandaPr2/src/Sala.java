@@ -9,6 +9,8 @@ public class Sala {
         this.numero = numero;
         this.fila = fila;
         this.butaca = butaca;
+
+
     }
 
     public String getNumero(){
@@ -18,7 +20,7 @@ public class Sala {
         return this.pelicula;
     }
     public void setPelicula(Pelicula pelicula){
-        this.pelicula = pelicula;
+       this.pelicula = pelicula;
     }
     public boolean estaVacia(){
         return false;

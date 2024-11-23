@@ -44,13 +44,9 @@ public class Main {
             System.out.println("5. comprar entrada");
             System.out.println("6. ver recaudacion");
             System.out.println("0. salir");
-            option = scanner.nextInt();
 
-            HashMap<Integer, String> movieGender = new HashMap<Integer, String>(); //key and value for Genders
-            movieGender.put(1, "Drama");
-            movieGender.put(2, "Terror");
-            movieGender.put(3, "Comédia");
-            movieGender.put(4, "Ficcion");
+            option = scanner.nextInt();
+            String[] movieGender = {"Drama", "Terror", "Comédia", "Ficción"};
 
             switch (option) {
                 case ANADIR:
@@ -63,7 +59,7 @@ public class Main {
                     System.out.println("2. Terror");
                     System.out.println("3. Comédia");
                     System.out.println("4. Ficción");
-                    gender = movieGender.get(scanner.nextInt());
+                    gender = movieGender[(scanner.nextInt()-1)];
 
                     System.out.println(gender);
 
