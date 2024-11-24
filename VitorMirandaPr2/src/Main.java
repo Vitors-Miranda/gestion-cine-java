@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.HashMap;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -35,22 +35,22 @@ public class Main {
         float precio, ocupacion;
         String horaSesion;
 
-        ArrayList<Sala> salas = new ArrayList<Sala>();
-        ArrayList<Sesion> sesiones = new ArrayList<Sesion>();
+        ArrayList<Sala> salas;
+        ArrayList<Sesion> sesiones;
 
         do{
             //user method choice
             System.out.println("Qué quiere hacer hoy?");
-            System.out.println("1. anadir pelicula");
-            System.out.println("2. eliminar pelicula");
-            System.out.println("3. crear sesion");
-            System.out.println("4. mostrar estado de sesion");
-            System.out.println("5. comprar entrada");
-            System.out.println("6. ver recaudacion");
-            System.out.println("0. salir");
+            System.out.println("1. Anadir pelicula");
+            System.out.println("2. Eliminar pelicula");
+            System.out.println("3. Crear sesion");
+            System.out.println("4. Mostrar estado de sesion");
+            System.out.println("5. Comprar entrada");
+            System.out.println("6. Ver recaudacion");
+            System.out.println("0. Salir");
 
             option = scanner.nextInt();
-            String[] movieGender = {"Drama", "Terror", "Comédia", "Ficción"};
+            String[] movieGender = {"Drama", "Terror", "Comédia", "Ciencia Ficción"};
 
             switch (option) {
                 case ANADIR:
@@ -177,17 +177,17 @@ public class Main {
                     System.out.println("Asientos Libres: " + asientosLibres);
                     System.out.println("Porcentaje de Ocupacion: " + ocupacion);
 
-                    System.out.print("Ingrese el número de entradas a comprar (máximo 5)");
+                    System.out.print("Ingrese el número de entradas a comprar (máximo 5): ");
                     nEntradas = scanner.nextInt();
 
-                    do {
+                    do {//Entradas != 1
                         if (nEntradas>5){
                             System.out.println("No se pueden comprar más de cinco entradas.");
                         }
 
                         if(nEntradas<5 && nEntradas!=1){
 
-                        ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion);
+                        ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion-1);
 
                         if (entradas.isEmpty()){
                             System.out.println("No hay asientos suficientes disponibles");
@@ -197,7 +197,7 @@ public class Main {
                                 System.out.println(entrada.obtenerInfo());
                             }
                         }
-                        }//Entradas != 1
+                        }
 
                         //Comprar única entrada  (nEntradas==1)
                         if (nEntradas==1){
@@ -206,7 +206,7 @@ public class Main {
                             System.out.print("Ingrese el número de la butaca: ");
                             int butaca = scanner.nextInt();
 
-                            Entrada entrada = cine1.comprarEntrada(fila,butaca,nSesion);
+                            Entrada entrada = cine1.comprarEntrada(fila-1,butaca-1,nSesion-1);
 
                             if(entrada != null){
                                 System.out.println("Información de la entrada comprada: ");
@@ -219,26 +219,13 @@ public class Main {
 
                     }while(nEntradas>5);
 
-                /*
-                    if (nEntradas>5){
-                        System.out.println("No se pueden comprar más de cinco entradas.");
-                    }else {
-                        ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion);
-
-                        if (entradas.isEmpty()){
-                            System.out.println("No hay asientos suficientes disponibles");
-                        }else {
-                            System.out.println("Entradas compradas correctamente: ");
-                            for (Entrada entrada : entradas){
-                                System.out.println(entrada.obtenerInfo());
-                            }
-                        }
-                    }*/
 
                     break;
                 case RECAUDACION:
+
                     break;
                 case SALIR:
+
                     break;
                 default:
                     System.out.println("Opción no válida");

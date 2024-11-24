@@ -45,14 +45,14 @@ public class Cine {
                 
                 Sesion sesion = new Sesion(precio, hora, sala, this.lastId);
                 this.sesiones.add(sesion);
-
+                System.out.println("Sesión creada con ID: "+sesion.getId());
                 this.lastId++;
             }
         }
     }
     public  Entrada comprarEntrada(int fila,int butaca, int idSesion){
         for (Sesion sesion:sesiones){
-            if (sesion.getSala().equals(idSesion)){
+            if (sesion.getId()==idSesion){
 
                 //Intento reservar la entrada en la sesión
                 Entrada entrada = sesion.reservarEntrada(fila,butaca);
@@ -92,7 +92,7 @@ public class Cine {
             // Si solo se compra una entrada, pedimos fila y butaca
             System.out.println("Comprando una entrada...");
             // Lógica para reservar una entrada
-            Entrada entrada = sesion.reservarEntrada(0, 0); // Suponiendo que el método `reservarEntrada` funciona con índices
+            Entrada entrada = sesion.reservarEntrada(0, 0);
             if (entrada != null) {
                 entradasCompradas.add(entrada);
                 System.out.println("Entrada comprada correctamente.");

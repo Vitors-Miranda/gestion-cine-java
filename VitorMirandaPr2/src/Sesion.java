@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 public class Sesion {
+    private static int contadorId = 0;
     private int id;
     private float precio;
     private String horaSesion;
@@ -11,7 +12,7 @@ public class Sesion {
         this.precio = precio;
         this.horaSesion = hora;
         this.sala = sala;
-        this.id = id;
+        this.id = contadorId++;
         this.asientoS = new boolean[sala.getFila()][sala.getButaca()];
     }
 
