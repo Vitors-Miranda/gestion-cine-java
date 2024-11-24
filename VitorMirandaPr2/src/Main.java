@@ -119,7 +119,7 @@ public class Main {
 
         //menu
         System.out.println("----------------------------");
-        System.out.println("Beienvenido al Cine Vitor!");
+        System.out.println("Beienvenido al Cine Vitor y Pedro Lima!");
         System.out.println("---------------------------");
 
 
@@ -135,7 +135,7 @@ public class Main {
         //declaracion de variables
         String title, gender;
         int duration, nSala, nSesion, asientosLibres;
-        float precio, ocupacion;
+        float precio, ocupacion, recaudaciones;
 
         //declaracion de listas y arrays
         ArrayList<Sala> salas = new ArrayList<Sala>();
@@ -279,14 +279,27 @@ public class Main {
                     System.out.println("Porcentaje de Ocupacion: " + ocupacion);
                     scanner.nextLine();
                     scanner.nextLine();
-
                     break;
+
                 case COMPRAR:
                     break;
+
                 case RECAUDACION:
+
+                    sesiones = cine1.getSesiones();
+                    if (sesiones.size() == 0) { //no hay sesiones
+                        System.out.println("No hay sesiones disponibles");
+                        break;
+                    }
+
+                    recaudaciones = cine1.obtenerRecaudacion();
+                    System.out.println("Recaudacion total del cine: " + recaudaciones);
                     break;
+
                 case SALIR:
+                    System.out.println("Adios!");
                     break;
+                    
                 default:
                     System.out.println("Opcion no valida");
             }

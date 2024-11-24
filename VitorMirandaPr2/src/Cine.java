@@ -66,10 +66,12 @@ public class Cine {
     public  ArrayList<Entrada> comprarEntradas(int cantidade, int idSesion){
         return new ArrayList<Entrada>();
     }
-    public  String verEstadoSesion( int idSesion){
-        return "hello world";
-    }
+
     public  float obtenerRecaudacion(){
-        return 1;
+        float recaudacionTotal = 0;
+        for (Sesion sesion : this.sesiones) {
+            recaudacionTotal += sesion.getRecaudacion();
+        }
+        return recaudacionTotal;
     }
 }

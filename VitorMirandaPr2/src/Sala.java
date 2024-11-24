@@ -31,4 +31,5 @@ public class Sala {
     public boolean estaVacia(){
         return this.pelicula == null;
     }
+
 }
