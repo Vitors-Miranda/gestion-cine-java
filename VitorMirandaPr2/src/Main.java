@@ -18,7 +18,7 @@ public class Main {
 
         //menu
         System.out.println("----------------------------");
-        System.out.println("Beienvenido al Cine Vitor!");
+        System.out.println("Bienvenido al Cine Vitor!");
         System.out.println("---------------------------");
 
 
@@ -31,7 +31,7 @@ public class Main {
         cine1.AgregarSala(sala2); //adding "sala 2" to cine 1
 
         String title, gender;
-        int duration, nSala, nSesion, asientosLibres;
+        int duration, nSala, nSesion, asientosLibres, nEntradas;
         float precio, ocupacion;
         String horaSesion;
 
@@ -58,16 +58,17 @@ public class Main {
                     System.out.println("Escriba el titulo de la pelicula:"); //title
                     title = scanner.next();
 
-                    System.out.println("Escriba el genero de la pelicula:"); //gender
+                    System.out.println("Escriba el género:"); //gender
                     System.out.println("1. Drama");
                     System.out.println("2. Terror");
                     System.out.println("3. Comédia");
                     System.out.println("4. Ciencia Ficción");
                     gender = movieGender[(scanner.nextInt()-1)];
 
+
                     System.out.println(gender);
 
-                    System.out.println("Escriba la duraccion de la pelicula (minutos):"); //time
+                    System.out.println("Escriba la duración en minutos:"); //time
                     duration = scanner.nextInt();
 
                     Pelicula pelicula = new Pelicula(title, gender, duration);//Creating the movie
@@ -137,12 +138,11 @@ public class Main {
 
                     System.out.println("Selecione una sesion: ");
                     nSesion = scanner.nextInt();
-                    String sesionGrafica = sesiones.get(nSesion-1).obtenerEstadoSesion();
 
-                    String[] asientos = sesionGrafica.split(",");
-                    for (String fila : asientos) {
-                        System.out.println(fila);
-                    }
+                    //mostrar estado de la sesión seleccionada
+                    System.out.println("Estado de la sección:");
+                    System.out.println(sesiones.get(nSesion-1).obtenerEstadoSesion());
+
 
                     asientosLibres = sesiones.get(nSesion-1).obtenerAsientosLibres();
                     ocupacion = sesiones.get(nSesion-1).obtenerPorcentajeOcupacion();
@@ -152,13 +152,96 @@ public class Main {
 
                     break;
                 case COMPRAR:
+
+
+                    //show disponible sessions
+                    System.out.println("Sesiones disponibles:");
+                    sesiones = cine1.getSesiones();
+
+                    for (int i = 0; i < sesiones.size(); i++) {
+                        System.out.println((i+1) + "." + sesiones.get(i).getSala());
+                    }
+
+                    System.out.print("Selecione una sesion: ");
+                    nSesion = scanner.nextInt();
+
+                    //mostrar estado de la sesión seleccionada
+                    System.out.println("Estado de la sección:");
+                    System.out.println(sesiones.get(nSesion-1).obtenerEstadoSesion());
+
+
+                    //mostrar asientos libres y porcentaje de ocupación
+                    asientosLibres = sesiones.get(nSesion-1).obtenerAsientosLibres();
+                    ocupacion = sesiones.get(nSesion-1).obtenerPorcentajeOcupacion();
+
+                    System.out.println("Asientos Libres: " + asientosLibres);
+                    System.out.println("Porcentaje de Ocupacion: " + ocupacion);
+
+                    System.out.print("Ingrese el número de entradas a comprar (máximo 5)");
+                    nEntradas = scanner.nextInt();
+
+                    do {
+                        if (nEntradas>5){
+                            System.out.println("No se pueden comprar más de cinco entradas.");
+                        }
+
+                        if(nEntradas<5 && nEntradas!=1){
+
+                        ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion);
+
+                        if (entradas.isEmpty()){
+                            System.out.println("No hay asientos suficientes disponibles");
+                        }else {
+                            System.out.println("Entradas compradas correctamente: ");
+                            for (Entrada entrada : entradas){
+                                System.out.println(entrada.obtenerInfo());
+                            }
+                        }
+                        }//Entradas != 1
+
+                        //Comprar única entrada  (nEntradas==1)
+                        if (nEntradas==1){
+                            System.out.print("Ingrese la fila del asiento: ");
+                            int fila = scanner.nextInt();
+                            System.out.print("Ingrese el número de la butaca: ");
+                            int butaca = scanner.nextInt();
+
+                            Entrada entrada = cine1.comprarEntrada(fila,butaca,nSesion);
+
+                            if(entrada != null){
+                                System.out.println("Información de la entrada comprada: ");
+                                System.out.println(entrada.obtenerInfo());
+                            }else {
+                                System.out.println("No se pudo comprar la entrada.");
+                            }
+
+                        }
+
+                    }while(nEntradas>5);
+
+                /*
+                    if (nEntradas>5){
+                        System.out.println("No se pueden comprar más de cinco entradas.");
+                    }else {
+                        ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion);
+
+                        if (entradas.isEmpty()){
+                            System.out.println("No hay asientos suficientes disponibles");
+                        }else {
+                            System.out.println("Entradas compradas correctamente: ");
+                            for (Entrada entrada : entradas){
+                                System.out.println(entrada.obtenerInfo());
+                            }
+                        }
+                    }*/
+
                     break;
                 case RECAUDACION:
                     break;
                 case SALIR:
                     break;
                 default:
-                    System.out.println("Opcion no valida");
+                    System.out.println("Opción no válida");
             }
         } while(option != 0);
     }

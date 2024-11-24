@@ -1,8 +1,15 @@
 public class Entrada {
+    private Sesion sesion;
     private int fila;
     private int butaca;
     private String sala;
     private String pelicula;
+
+    public Entrada(Sesion sesion, int fila, int butaca) {
+        this.sesion = sesion;
+        this.fila = fila;
+        this.butaca = butaca;
+    }
 
     public int getFila(){
         return fila;
@@ -13,6 +20,6 @@ public class Entrada {
     }
 
     public String obtenerInfo(){
-        return "";
+        return "Entrada - Sesión "+sesion.getSala()+", Fila: "+fila+", Butaca: "+butaca;
     }
 }
