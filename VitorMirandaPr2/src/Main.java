@@ -41,12 +41,12 @@ public class Main {
         do{
             //user method choice
             System.out.println("Qué quiere hacer hoy?");
-            System.out.println("1. Anadir pelicula");
-            System.out.println("2. Eliminar pelicula");
-            System.out.println("3. Crear sesion");
-            System.out.println("4. Mostrar estado de sesion");
+            System.out.println("1. Anadir película");
+            System.out.println("2. Eliminar película");
+            System.out.println("3. Crear sesión");
+            System.out.println("4. Mostrar estado de sesión");
             System.out.println("5. Comprar entrada");
-            System.out.println("6. Ver recaudacion");
+            System.out.println("6. Ver recaudación");
             System.out.println("0. Salir");
 
             option = scanner.nextInt();
@@ -113,13 +113,13 @@ public class Main {
                         }
                     }
 
-                    System.out.println("Cual sala le gustaria crear sesion? ");
+                    System.out.println("En cuál sala le gustaria crear sesión? ");
                     nSala = scanner.nextInt();
 
-                    System.out.println("Cual precio de la sesion? ");
+                    System.out.println("Cuál precio de la sesión? ");
                     precio = scanner.nextFloat();
 
-                    System.out.println("Cual hora de la sesion? ");
+                    System.out.println("Cuál hora de la sesion? ");
                     horaSesion = scanner.next();
 
                     System.out.println(salas.get(nSala-1).getNumero());
@@ -136,11 +136,11 @@ public class Main {
                             System.out.println((i+1) + "." + sesiones.get(i).getSala());
                     }
 
-                    System.out.println("Selecione una sesion: ");
+                    System.out.println("Selecione una sesión: ");
                     nSesion = scanner.nextInt();
 
                     //mostrar estado de la sesión seleccionada
-                    System.out.println("Estado de la sección:");
+                    System.out.println("Estado de la sesión:");
                     System.out.println(sesiones.get(nSesion-1).obtenerEstadoSesion());
 
 
@@ -162,11 +162,11 @@ public class Main {
                         System.out.println((i+1) + "." + sesiones.get(i).getSala());
                     }
 
-                    System.out.print("Selecione una sesion: ");
+                    System.out.print("Selecione una sesión: ");
                     nSesion = scanner.nextInt();
 
                     //mostrar estado de la sesión seleccionada
-                    System.out.println("Estado de la sección:");
+                    System.out.println("Estado de la sesión:");
                     System.out.println(sesiones.get(nSesion-1).obtenerEstadoSesion());
 
 
