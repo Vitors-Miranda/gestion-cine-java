@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Objects;
+import java.time.LocalTime;
 
 public class Cine {
     private String nombre;
@@ -16,8 +17,17 @@ public class Cine {
     public  void AgregarSala(Sala sala){
         this.salas.add(sala);
     }
-    public ArrayList<Sala> getSalas(){
-        return this.salas;
+    public ArrayList<Sala> getSalas(boolean vazia){
+        ArrayList<Sala> salas = new ArrayList<>();
+
+            for (Sala sala : this.salas){
+                if (vazia && sala.estaVacia()) {
+                    salas.add(sala);
+                } else if (!vazia && !sala.estaVacia()){
+                    salas.add(sala);
+                }
+            }
+        return salas;
     }
     public  void AgregarPelicula(String nSala, Pelicula pelicula){
         for (Sala sala : this.salas) {
@@ -38,7 +48,7 @@ public class Cine {
         return this.sesiones;
     }
 
-    public  void CrearSession(float precio, String hora,  String nSala){
+    public  void CrearSession(float precio, LocalTime hora,  String nSala){
 
         for (Sala sala : this.salas) {
             if (Objects.equals(sala.getNumero(), nSala)) {

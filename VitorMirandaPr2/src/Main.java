@@ -1,11 +1,112 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.HashMap;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Main {
-    public static void main(String[] args) {
-        int option;
 
+    //TRATAMIENTO DE ERRORES
+
+    //Integer Control de errores
+    public static Integer checkInteger(Scanner scanner, String text, int lastIndice){
+
+        int number = -1;
+
+        while (number < 0) {
+            try{
+                System.out.println(text);
+                number = scanner.nextInt();
+
+                if (lastIndice > 0){ //Son opiciones limitadas
+                    if (number > lastIndice){ //El valor es mayor que el  numero maximo de opiciones
+                        number = 0;
+                    } else{ //normalizando el vetor
+                        number --;
+                    }
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Respuesta inválida!");
+                scanner.nextLine();
+            }
+        }
+        return number;
+    }
+
+    //Float Control de errores
+    public static float checkFloat(Scanner scanner, String text){
+        float number = 0;
+
+        while (number < 1) {
+            try{
+                System.out.println(text);
+                number = scanner.nextFloat();
+            } catch (InputMismatchException e) {
+                System.out.println("Respuesta inválida!");
+                scanner.nextLine();
+            }
+        }
+        return number;
+    }
+    //Genero control de errores
+    public static String checkGender(Scanner scanner, String[] movieGender){
+        int index = -1;
+
+        while (index == -1) {
+            try {
+                //Recibindo el genero del usuario
+                System.out.println("Escriba el genero de la pelicula:");
+                System.out.println("1. Drama");
+                System.out.println("2. Terror");
+                System.out.println("3. Comédia");
+                System.out.println("4. Ciencia Ficción");
+                index = (scanner.nextInt() - 1);
+
+                if (index < 0 || index > 3) {
+                    index = -1;
+                    System.out.println("Respuesta Inválida!");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Respuesta inválida!");
+                scanner.nextLine(); // Discartar la entrada invalida
+            }
+        }
+        return movieGender[index];
+    }
+    //String control de errores
+    public static String stringCheck(String question, Scanner scanner) {
+        String text = null;
+        while (text == null) {
+                System.out.println(question); //recibindo la pregunta
+                text = scanner.nextLine();
+                if (text.length() < 3) {
+                    text = null;
+                    System.out.println("Nombre Inválido! Mínimo de 3 caracteres");
+                }
+        }
+
+        return text;
+    }
+    //LocalTime
+    public static LocalTime localTimeCheck(LocalTime HoraSesion, Scanner scanner, DateTimeFormatter formatter) {
+        while (HoraSesion == null) {
+            try {
+                System.out.println("Cual hora de la sesion? (HH:mm)");
+                String _horaSesion = scanner.nextLine(); //recibindo como una String
+                HoraSesion = LocalTime.parse(_horaSesion, formatter); //convertiendo para LocalTime
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato inválido!");
+            }
+        }
+
+        return HoraSesion;
+    }
+
+    public static void main(String[] args) {
+
+        //constantes
+        int option;
         final int ANADIR = 1;
         final int ELIMINAR = 2;
         final int CREAR = 3;
@@ -22,25 +123,34 @@ public class Main {
         System.out.println("---------------------------");
 
 
+        //creando las salas
+        Sala sala1 = new Sala("Sala Comun 5", 5, 5);
+        Sala sala2 = new Sala("Sala VIP 10", 7, 4);
 
-        Sala sala1 = new Sala("Sala Comun 5", 5, 5); //creating sala 1
-        Sala sala2 = new Sala("Sala VIP 10", 7, 4); //creating sala 2
+        //creando el cine y agregando las salas
+        Cine cine1 = new Cine("Cine Vitor y Pedro", "Linares");
+        cine1.AgregarSala(sala1);
+        cine1.AgregarSala(sala2);
 
-        Cine cine1 = new Cine("Cine Vitor y Pedro", "Linares"); //creating cine 1
-        cine1.AgregarSala(sala1); //adding "sala 1" to cine 1
-        cine1.AgregarSala(sala2); //adding "sala 2" to cine 1
-
+        //declaracion de variables
         String title, gender;
         int duration, nSala, nSesion, asientosLibres;
         float precio, ocupacion;
-        String horaSesion;
 
+        //declaracion de listas y arrays
         ArrayList<Sala> salas = new ArrayList<Sala>();
         ArrayList<Sesion> sesiones = new ArrayList<Sesion>();
+        String[] movieGender = {"Drama", "Terror", "Comédia", "Ficción"};
+
+
+        //localTime para la hora de la Sesion
+        LocalTime horaSesion = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); //estandar
+
 
         do{
-            //user method choice
-            System.out.println("Qué quiere hacer hoy?");
+            //menu de acciones del usuario
+            System.out.println();
             System.out.println("1. anadir pelicula");
             System.out.println("2. eliminar pelicula");
             System.out.println("3. crear sesion");
@@ -49,106 +159,126 @@ public class Main {
             System.out.println("6. ver recaudacion");
             System.out.println("0. salir");
 
-            option = scanner.nextInt();
-            String[] movieGender = {"Drama", "Terror", "Comédia", "Ficción"};
+            //generos de la pelicula
+            option = checkInteger(scanner, "Qué quiere hacer hoy?", 0);
 
             switch (option) {
                 case ANADIR:
+                    salas = cine1.getSalas(true);
 
-                    System.out.println("Escriba el titulo de la pelicula:"); //title
-                    title = scanner.next();
+                    if (salas.size() == 0) {// no hay salas libres
+                        System.out.println("No hay salas disponibles");
+                        break;
+                    }
+                    //Recibindo el titulo del usuario
+                    scanner.nextLine();
+                    title = stringCheck("Escriba el titulo de la pelicula:", scanner);
 
-                    System.out.println("Escriba el genero de la pelicula:"); //gender
-                    System.out.println("1. Drama");
-                    System.out.println("2. Terror");
-                    System.out.println("3. Comédia");
-                    System.out.println("4. Ciencia Ficción");
-                    gender = movieGender[(scanner.nextInt()-1)];
+                    gender = checkGender(scanner, movieGender);
 
-                    System.out.println(gender);
+                    //Recibindo la duracion
+                    duration = checkInteger(scanner, "Escriba la duraccion de la pelicula (minutos):", 0);
 
-                    System.out.println("Escriba la duraccion de la pelicula (minutos):"); //time
-                    duration = scanner.nextInt();
+                    Pelicula pelicula = new Pelicula(title, gender, duration);//Creando el objeto de la pelicula
 
-                    Pelicula pelicula = new Pelicula(title, gender, duration);//Creating the movie
-
-                    //show disponible rooms
-                    System.out.println("Salas disponibles:"); 
-                    salas = cine1.getSalas();
+                    //Muestrando las salas disponibles
+                    System.out.println("Salas disponibles:");
 
                     for (int i = 0; i < salas.size(); i++) {
-                        if (salas.get(i).getPelicula() == null) { //if the room has not a movie
                             System.out.println((i+1) + "." + salas.get(i).getNumero());
-                        }
                     }
 
-                    System.out.println("Cual sala le gustaria anadir la pelicula? ");
-                    nSala = scanner.nextInt();
+                    //Recibindo la sala del usuaio
+                    nSala = checkInteger(scanner, "Cual sala le gustaria anadir la pelicula? ", salas.size());
 
-                    cine1.AgregarPelicula(salas.get(nSala-1).getNumero(), pelicula);
+                    cine1.AgregarPelicula(salas.get(nSala).getNumero(), pelicula); //anadindo la pelicula en la sala
 
                     break;
                 case ELIMINAR:
-                    System.out.println("Películas disponibles: ");
-                    salas = cine1.getSalas();
-                    for (int i = 0; i < salas.size(); i++) {
-                        if (salas.get(i).getPelicula() != null) { //if the room has a movie
-                            System.out.println((i+1)+". Película: " + salas.get(i).getPelicula().getTitulo() + " (" + salas.get(i).getNumero()  + ")"  );
-                        }
+                    salas = cine1.getSalas(false);
+
+                    if (salas.size() == 0) {// no hay peliculas registradas
+                        System.out.println("No hay salas con peliculas");
+                        break;
                     }
-                    System.out.println("\nCuál película deseas eliminar?");
-                    nSala = scanner.nextInt();
-                    cine1.EliminarPelicula(salas.get(nSala-1).getNumero());
+
+                    //Muestrando las peliculas disponibles
+                    System.out.println("Películas disponibles: ");
+                    for (int i = 0; i < salas.size(); i++) {
+                            System.out.println((i+1)+". Película: " + salas.get(i).getPelicula().getTitulo() + " (" + salas.get(i).getNumero()  + ")"  );
+                    }
+
+                    //Recibindo la sala que tiene la pelicula a eliminar
+                    nSala = checkInteger(scanner, "Cuál película deseas eliminar?", salas.size());
+
+                    cine1.EliminarPelicula(salas.get(nSala).getNumero());
 
                     break;
                 case CREAR:
-                    //show disponible rooms
-                    System.out.println("Salas disponibles:");
-                    salas = cine1.getSalas();
+                    salas = cine1.getSalas(false);
 
-                    for (int i = 0; i < salas.size(); i++) {
-                        if (salas.get(i).getPelicula() != null) { //if the room has not a movie
-                            System.out.println((i+1) + "." + salas.get(i).getNumero());
-                        }
+                    if (salas.size() == 0) { // no hay salas disponibles
+                        System.out.println("No hay salas con peliculas.");
+                        break;
                     }
 
-                    System.out.println("Cual sala le gustaria crear sesion? ");
-                    nSala = scanner.nextInt();
+                    //muestrar las salas disponibles
+                    System.out.println("Salas disponibles:");
+                    for (int i = 0; i < salas.size(); i++) {
+                            System.out.println((i+1) + "." + salas.get(i).getNumero());
+                    }
 
-                    System.out.println("Cual precio de la sesion? ");
-                    precio = scanner.nextFloat();
+                    //Recibindo la session del usuario
+                    nSala = checkInteger(scanner, "Cual sala le gustaria crear sesion?", salas.size());
 
-                    System.out.println("Cual hora de la sesion? ");
-                    horaSesion = scanner.next();
+                    //Recibindo el precio
+                    precio = checkFloat(scanner, "Cual precio de la sesion? ");
 
-                    System.out.println(salas.get(nSala-1).getNumero());
+                    scanner.nextLine();
 
-                    cine1.CrearSession(precio, horaSesion, salas.get(nSala-1).getNumero());
+                    //Recibindo el horario
+                    horaSesion = localTimeCheck(horaSesion, scanner, formatter);
+
+                    System.out.println(salas.get(nSala).getNumero());
+                    cine1.CrearSession(precio, horaSesion, salas.get(nSala).getNumero());
 
                     break;
                 case MOSTRAR:
-                    //show disponible sessions
-                    System.out.println("Sesiones disponibles:");
                     sesiones = cine1.getSesiones();
+                    if (sesiones.size() == 0) {
+                        System.out.println("No hay sesiones disponibles");
+                        break;
+                    }
+
+                    //mestrando sesiones disponibles
+                    System.out.println("Sesiones disponibles:");
 
                     for (int i = 0; i < sesiones.size(); i++) {
-                            System.out.println((i+1) + "." + sesiones.get(i).getSala());
+                            System.out.println((i+1) + "." + sesiones.get(i).getSala().getNumero());
                     }
 
-                    System.out.println("Selecione una sesion: ");
-                    nSesion = scanner.nextInt();
-                    String sesionGrafica = sesiones.get(nSesion-1).obtenerEstadoSesion();
+                    //Recibindo la sesion
+                    nSesion = checkInteger(scanner, "Selecione una sesion:", salas.size());
 
-                    String[] asientos = sesionGrafica.split(",");
-                    for (String fila : asientos) {
-                        System.out.println(fila);
+                    int fila =  sesiones.get(nSesion).getSala().getFila();
+                    int butaca =  sesiones.get(nSesion).getSala().getButaca();
+
+                    //muestrando el estado de la session (grafica)
+                    String[][]  sesionGrafica = sesiones.get(nSesion).obtenerEstadoSesion();
+                    for (int i = 0; i < fila; i++){
+                        for (int j = 0; j < butaca; j++){
+                            System.out.print(sesionGrafica[i][j]);
+                        }
+                        System.out.println();
                     }
 
-                    asientosLibres = sesiones.get(nSesion-1).obtenerAsientosLibres();
-                    ocupacion = sesiones.get(nSesion-1).obtenerPorcentajeOcupacion();
-
+                    //asientos libres libres y porcentaje de ocupacion
+                    asientosLibres = sesiones.get(nSesion).obtenerAsientosLibres();
+                    ocupacion = sesiones.get(nSesion).obtenerPorcentajeOcupacion();
                     System.out.println("Asientos Libres: " + asientosLibres);
                     System.out.println("Porcentaje de Ocupacion: " + ocupacion);
+                    scanner.nextLine();
+                    scanner.nextLine();
 
                     break;
                 case COMPRAR:

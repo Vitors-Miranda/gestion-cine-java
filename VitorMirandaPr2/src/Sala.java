@@ -9,8 +9,6 @@ public class Sala {
         this.numero = numero;
         this.fila = fila;
         this.butaca = butaca;
-
-
     }
 
     public int getButaca() {
@@ -31,10 +29,6 @@ public class Sala {
        this.pelicula = pelicula;
     }
     public boolean estaVacia(){
-        return false;
-    }
-
-    public void eliminarPelicula(){
-
+        return this.pelicula == null;
     }
 }

@@ -1,21 +1,24 @@
-import java.time.*;
+import java.time.LocalTime;
+
 import java.util.ArrayList;
 public class Sesion {
     private int id;
     private float precio;
-    private String horaSesion;
+    private LocalTime horaSesion;
     private float recaudacion;
     private Sala sala;
+    private boolean[][] asientos;
 
-    public Sesion(float precio, String hora, Sala sala, int id){
+    public Sesion(float precio, LocalTime hora, Sala sala, int id){
         this.precio = precio;
         this.horaSesion = hora;
         this.sala = sala;
         this.id = id;
+        asientos = new boolean[sala.getFila()][sala.getButaca()];
     }
 
-    public String getSala() {
-        return sala.getNumero();
+    public Sala getSala() {
+        return this.sala;
     }
 
     public Entrada reservarEntrada(int fila, int butaca){
@@ -26,15 +29,16 @@ public class Sesion {
         return new ArrayList<Entrada>();
     };
 
-    public String obtenerEstadoSesion(){
+    public String[][] obtenerEstadoSesion(){
         int fila = this.sala.getFila();
         int butaca = this.sala.getButaca();
-        String asientos = "";
+        String[][] asientos = new String[fila][butaca];
+
+
         for (int i = 0; i < fila; i++){
             for (int j = 0; j < butaca; j++){
-                asientos += " - ";
+                asientos[i][j] = !this.asientos[i][j] ? " - " : " # ";
             }
-            asientos += ",";
         }
 
         return asientos;
