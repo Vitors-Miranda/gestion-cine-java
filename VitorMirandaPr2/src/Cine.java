@@ -49,6 +49,14 @@ public class Cine {
     }
 
     public  void CrearSession(float precio, LocalTime hora,  String nSala){
+        int id = -1;
+
+        //P si ya hay una sesion en la sala
+        for (Sesion sesion : this.sesiones) {
+            if (Objects.equals(sesion.getSala().getNumero(), nSala)){
+                this.sesiones.remove(sesion);
+            }
+        }
 
         for (Sala sala : this.salas) {
             if (Objects.equals(sala.getNumero(), nSala)) {

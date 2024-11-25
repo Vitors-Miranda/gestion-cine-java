@@ -148,6 +148,7 @@ public class Main {
     }
     //LocalTime Control de Errores
     public static LocalTime localTimeCheck(LocalTime HoraSesion, Scanner scanner, DateTimeFormatter formatter) {
+        HoraSesion = null;
         while (HoraSesion == null) {
             try {
                 System.out.println("Cual hora de la sesion? (HH:mm)");
@@ -287,12 +288,12 @@ public class Main {
                             System.out.println((i+1) + "." + salas.get(i).getNumero());
                     }
 
+                    //Se permiete reemplazar sesiones
                     //Recibindo la session del usuario
                     nSala = checkInteger(scanner, "En Cuál sala le gustaria crear sesion?", salas.size());
 
                     //Recibindo el precio
                     precio = checkFloat(scanner, "En cuál precio de la sesión? ");
-
                     scanner.nextLine();
 
                     //Recibindo el horario
