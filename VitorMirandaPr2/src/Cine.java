@@ -61,10 +61,45 @@ public class Cine {
         }
     }
     public  Entrada comprarEntrada(int fila,int butaca, int idSesion){
-        return new Entrada();
+        for (Sesion sesion:sesiones){
+            if (sesion.getSala().equals(idSesion)){
+
+                //Intento reservar la entrada en la sesión
+                Entrada entrada = sesion.reservarEntrada(fila,butaca);
+                if (entrada!=null){
+                    return entrada;
+                }
+            }
+        }
+        return null;
     }
-    public  ArrayList<Entrada> comprarEntradas(int cantidade, int idSesion){
-        return new ArrayList<Entrada>();
+    public  ArrayList<Entrada> comprarEntradas(int cantidad, int idSesion){
+        ArrayList<Entrada> entradasCompradas = new ArrayList<>();
+        // Buscar la sesión por su ID
+        Sesion sesion = null;
+
+        for (Sesion s : sesiones) {
+            if (s.getId() == idSesion) {
+                sesion = s;
+                break; // Se encontró la sesión
+            }
+        }
+        if (sesion == null) {
+            return entradasCompradas; // Si no se encuentra la sesión, regresamos una lista vacía
+        }
+        // Intentamos comprar las entradas
+        if (cantidad == 1) {
+            // Lógica para reservar una entrada
+            Entrada entrada = sesion.reservarEntrada(0, 0); // Suponiendo que el método `reservarEntrada` funciona con índices
+            if (entrada != null) {
+                entradasCompradas.add(entrada);
+            }
+
+        } else {
+            // Si se desean comprar múltiples entradas, intentamos reservar asientos consecutivos
+            entradasCompradas = sesion.reservarEntradas(cantidad);
+        }
+        return entradasCompradas;
     }
 
     public  float obtenerRecaudacion(){

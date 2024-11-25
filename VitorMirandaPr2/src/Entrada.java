@@ -3,7 +3,12 @@ public class Entrada {
     private int butaca;
     private String sala;
     private String pelicula;
-
+    private Sesion sesion;
+    public Entrada(Sesion sesion, int fila, int butaca) {
+        this.sesion = sesion;
+        this.fila = fila;
+        this.butaca = butaca;
+    }
     public int getFila(){
         return fila;
     }
@@ -13,6 +18,6 @@ public class Entrada {
     }
 
     public String obtenerInfo(){
-        return "";
+        return "Entrada - Sesión "+sesion.getSala().getNumero()+", Fila: "+fila+", Butaca: "+butaca;
     }
 }

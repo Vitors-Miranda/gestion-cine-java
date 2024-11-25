@@ -10,7 +10,7 @@ public class Main {
     //TRATAMIENTO DE ERRORES
 
     //Integer Control de errores
-    public static Integer checkInteger(Scanner scanner, String text, int lastIndice){
+    public static Integer checkInteger(Scanner scanner, String text, int limite){
 
         int number = -1;
 
@@ -19,9 +19,9 @@ public class Main {
                 System.out.println(text);
                 number = scanner.nextInt();
 
-                if (lastIndice > 0){ //Son opiciones limitadas
-                    if (number > lastIndice){ //El valor es mayor que el  numero maximo de opiciones
-                        number = 0;
+                if (limite > 0){ //Son opiciones limitadas
+                    if (number > limite){ //El valor es mayor que el  numero maximo de opiciones
+                        number = -1;
                     } else{ //normalizando el vetor
                         number --;
                     }
@@ -49,6 +49,54 @@ public class Main {
         }
         return number;
     }
+    //estado de la sesion
+    public static int estadoSesion(Scanner scanner, Cine cine1, ArrayList<Sesion> sesiones, ArrayList<Sala> salas){
+        int nSesion, asientosLibres;
+        float ocupacion;
+
+        sesiones = cine1.getSesiones();
+        if (sesiones.size() == 0) {
+            return -1;
+        }
+
+        //mestrando sesiones disponibles
+        System.out.println("Sesiones disponibles:");
+
+        for (int i = 0; i < sesiones.size(); i++) {
+            System.out.println();
+            System.out.println((i+1) + ". " + sesiones.get(i).getSala().getNumero());
+            System.out.println("Película:" + sesiones.get(i).getSala().getPelicula().getTitulo());
+            System.out.println("Precio: " + sesiones.get(i).getPrecio());
+            System.out.println("Hora: " + sesiones.get(i).getHora());
+            System.out.println();
+        }
+
+        //Recibindo la sesion
+        nSesion = checkInteger(scanner, "Selecione una sesión:", salas.size());
+
+        int fila =  sesiones.get(nSesion).getSala().getFila();
+        int butaca =  sesiones.get(nSesion).getSala().getButaca();
+
+        //muestrando el estado de la session (grafica)
+        String[][]  sesionGrafica = sesiones.get(nSesion).obtenerEstadoSesion();
+        for (int i = 0; i < fila; i++){
+            for (int j = 0; j < butaca; j++){
+                System.out.print(sesionGrafica[i][j]);
+            }
+            System.out.println();
+        }
+
+        //asientos libres libres y porcentaje de ocupacion
+        asientosLibres = sesiones.get(nSesion).obtenerAsientosLibres();
+        ocupacion = sesiones.get(nSesion).obtenerPorcentajeOcupacion();
+        System.out.println("Asientos Libres: " + asientosLibres);
+        System.out.println("Porcentaje de Ocupacion: " + ocupacion);
+        System.out.println("[ENTER] para continuar");
+        scanner.nextLine();
+        scanner.nextLine();
+
+        return nSesion ;
+    }
     //Genero control de errores
     public static String checkGender(Scanner scanner, String[] movieGender){
         int index = -1;
@@ -56,7 +104,7 @@ public class Main {
         while (index == -1) {
             try {
                 //Recibindo el genero del usuario
-                System.out.println("Escriba el genero de la pelicula:");
+                System.out.println("Escriba el género:");
                 System.out.println("1. Drama");
                 System.out.println("2. Terror");
                 System.out.println("3. Comédia");
@@ -119,7 +167,7 @@ public class Main {
 
         //menu
         System.out.println("----------------------------");
-        System.out.println("Beienvenido al Cine Vitor y Pedro Lima!");
+        System.out.println("Bienvenido al Cine Vitor y Pedro Lima!");
         System.out.println("---------------------------");
 
 
@@ -134,13 +182,14 @@ public class Main {
 
         //declaracion de variables
         String title, gender;
-        int duration, nSala, nSesion, asientosLibres;
-        float precio, ocupacion, recaudaciones;
+        int duration, nSala, nSesion, nEntradas;
+        float precio, recaudaciones;
 
         //declaracion de listas y arrays
         ArrayList<Sala> salas = new ArrayList<Sala>();
+
         ArrayList<Sesion> sesiones = new ArrayList<Sesion>();
-        String[] movieGender = {"Drama", "Terror", "Comédia", "Ficción"};
+        String[] movieGender = {"Drama", "Terror", "Comédia", "Ciencia Ficción"};
 
 
         //localTime para la hora de la Sesion
@@ -151,13 +200,13 @@ public class Main {
         do{
             //menu de acciones del usuario
             System.out.println();
-            System.out.println("1. anadir pelicula");
-            System.out.println("2. eliminar pelicula");
-            System.out.println("3. crear sesion");
-            System.out.println("4. mostrar estado de sesion");
-            System.out.println("5. comprar entrada");
-            System.out.println("6. ver recaudacion");
-            System.out.println("0. salir");
+            System.out.println("1. Anadir película");
+            System.out.println("2. Eliminar película");
+            System.out.println("3. Crear sesión");
+            System.out.println("4. Mostrar estado de sesión");
+            System.out.println("5. Comprar entrada");
+            System.out.println("6. Ver recaudación");
+            System.out.println("0. Salir");
 
             //generos de la pelicula
             option = checkInteger(scanner, "Qué quiere hacer hoy?", 0);
@@ -177,7 +226,7 @@ public class Main {
                     gender = checkGender(scanner, movieGender);
 
                     //Recibindo la duracion
-                    duration = checkInteger(scanner, "Escriba la duraccion de la pelicula (minutos):", 0);
+                    duration = checkInteger(scanner, "Escriba la duración en minutos:", 0);
 
                     Pelicula pelicula = new Pelicula(title, gender, duration);//Creando el objeto de la pelicula
 
@@ -189,7 +238,7 @@ public class Main {
                     }
 
                     //Recibindo la sala del usuaio
-                    nSala = checkInteger(scanner, "Cual sala le gustaria anadir la pelicula? ", salas.size());
+                    nSala = checkInteger(scanner, "En cuál sala le gustaria anadir la pelicula? ", salas.size());
 
                     cine1.AgregarPelicula(salas.get(nSala).getNumero(), pelicula); //anadindo la pelicula en la sala
 
@@ -229,10 +278,10 @@ public class Main {
                     }
 
                     //Recibindo la session del usuario
-                    nSala = checkInteger(scanner, "Cual sala le gustaria crear sesion?", salas.size());
+                    nSala = checkInteger(scanner, "En Cuál sala le gustaria crear sesion?", salas.size());
 
                     //Recibindo el precio
-                    precio = checkFloat(scanner, "Cual precio de la sesion? ");
+                    precio = checkFloat(scanner, "En cuál precio de la sesión? ");
 
                     scanner.nextLine();
 
@@ -244,44 +293,42 @@ public class Main {
 
                     break;
                 case MOSTRAR:
-                    sesiones = cine1.getSesiones();
-                    if (sesiones.size() == 0) {
-                        System.out.println("No hay sesiones disponibles");
-                        break;
-                    }
-
-                    //mestrando sesiones disponibles
-                    System.out.println("Sesiones disponibles:");
-
-                    for (int i = 0; i < sesiones.size(); i++) {
-                            System.out.println((i+1) + "." + sesiones.get(i).getSala().getNumero());
-                    }
-
-                    //Recibindo la sesion
-                    nSesion = checkInteger(scanner, "Selecione una sesion:", salas.size());
-
-                    int fila =  sesiones.get(nSesion).getSala().getFila();
-                    int butaca =  sesiones.get(nSesion).getSala().getButaca();
-
-                    //muestrando el estado de la session (grafica)
-                    String[][]  sesionGrafica = sesiones.get(nSesion).obtenerEstadoSesion();
-                    for (int i = 0; i < fila; i++){
-                        for (int j = 0; j < butaca; j++){
-                            System.out.print(sesionGrafica[i][j]);
-                        }
-                        System.out.println();
-                    }
-
-                    //asientos libres libres y porcentaje de ocupacion
-                    asientosLibres = sesiones.get(nSesion).obtenerAsientosLibres();
-                    ocupacion = sesiones.get(nSesion).obtenerPorcentajeOcupacion();
-                    System.out.println("Asientos Libres: " + asientosLibres);
-                    System.out.println("Porcentaje de Ocupacion: " + ocupacion);
-                    scanner.nextLine();
-                    scanner.nextLine();
+                    estadoSesion(scanner, cine1, sesiones, salas);
                     break;
 
                 case COMPRAR:
+                    nSesion = estadoSesion(scanner, cine1,sesiones, salas);
+
+                    if (nSesion < 0){
+                        System.out.println("No hay sesiones disponibles");
+                        break;
+                    }
+                    int fila, butaca;
+                    nEntradas = checkInteger(scanner, "Ingrese el número de entradas a comprar (máximo 5)", 5) +1;
+                    //Comprar única entrada
+                    if (nEntradas==1) {
+                        fila = checkInteger(scanner, "Ingrese la fila del asiento: ", 0);
+                        butaca = checkInteger(scanner, "Ingrese el número de la butaca: ", 0);
+
+                        Entrada entrada = cine1.comprarEntrada(fila, butaca, nSesion);
+                        if (entrada != null) {
+                            System.out.println("Información de la entrada comprada: ");
+                            System.out.println(entrada.obtenerInfo());
+
+                        } else {
+                            System.out.println("No se pudo comprar la entrada");
+                        }
+                    } else {
+                        ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion);
+                        if (entradas.isEmpty()){
+                            System.out.println("No fue possible comprar las entradas");
+                        }else {
+                            System.out.println("Entradas compradas correctamente: ");
+                            for (Entrada entrada : entradas){
+                                System.out.println(entrada.obtenerInfo());
+                            }
+                        }
+                    }
                     break;
 
                 case RECAUDACION:
@@ -299,7 +346,7 @@ public class Main {
                 case SALIR:
                     System.out.println("Adios!");
                     break;
-                    
+
                 default:
                     System.out.println("Opcion no valida");
             }
