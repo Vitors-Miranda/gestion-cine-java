@@ -18,6 +18,6 @@ public class Entrada {
     }
 
     public String obtenerInfo(){
-        return "Entrada - Sesión "+sesion.getSala().getNumero()+", Fila: "+fila+", Butaca: "+butaca;
+        return "Entrada - Sesión "+sesion.getSala().getNumero()+", Fila: "+(fila+1)+", Butaca: "+(butaca+1);
     }
 }

@@ -104,7 +104,7 @@ public class Cine {
         // Intentamos comprar las entradas
         if (cantidad == 1) {
             // Lógica para reservar una entrada
-            Entrada entrada = sesion.reservarEntrada(0, 0); // Suponiendo que el método `reservarEntrada` funciona con índices
+            Entrada entrada = sesion.reservarEntrada(0, 0);
             if (entrada != null) {
                 entradasCompradas.add(entrada);
             }

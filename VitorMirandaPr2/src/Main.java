@@ -1,7 +1,7 @@
 /*
 Práctica 2
 Autores: Vitor Samuel Miranda de Souza
-Autores: Pedro Lima Silva
+Autores: Pedro Henrique Lima Silva
 GITHUB: https://github.com/Vitors-Miranda/gestion-cine-java
 */
 
@@ -229,25 +229,25 @@ public class Main {
                         System.out.println("No hay salas disponibles");
                         break;
                     }
-                    //Recibindo el titulo del usuario
+                    //Recibiendo el titulo del usuario
                     scanner.nextLine();
                     title = stringCheck("Escriba el titulo de la pelicula:", scanner);
 
                     gender = checkGender(scanner, movieGender);
 
-                    //Recibindo la duracion
+                    //Recibiendo la duracion
                     duration = checkInteger(scanner, "Escriba la duración en minutos:", 0);
 
                     Pelicula pelicula = new Pelicula(title, gender, duration);//Creando el objeto de la pelicula
 
-                    //Muestrando las salas disponibles
+                    //Mostrando las salas disponibles
                     System.out.println("Salas disponibles:");
 
                     for (int i = 0; i < salas.size(); i++) {
                             System.out.println((i+1) + "." + salas.get(i).getNumero());
                     }
 
-                    //Recibindo la sala del usuaio
+                    //Recibiendo la sala del usuaio
                     nSala = checkInteger(scanner, "En cuál sala le gustaria anadir la pelicula? ", salas.size());
 
                     cine1.AgregarPelicula(salas.get(nSala).getNumero(), pelicula); //anadindo la pelicula en la sala
@@ -261,13 +261,13 @@ public class Main {
                         break;
                     }
 
-                    //Muestrando las peliculas disponibles
+                    //Mostrando las peliculas disponibles
                     System.out.println("Películas disponibles: ");
                     for (int i = 0; i < salas.size(); i++) {
                             System.out.println((i+1)+". Película: " + salas.get(i).getPelicula().getTitulo() + " (" + salas.get(i).getNumero()  + ")"  );
                     }
 
-                    //Recibindo la sala que tiene la pelicula a eliminar
+                    //Recibiendo la sala que tiene la pelicula a eliminar
                     nSala = checkInteger(scanner, "Cuál película deseas eliminar?", salas.size());
 
                     cine1.EliminarPelicula(salas.get(nSala).getNumero());
@@ -281,7 +281,7 @@ public class Main {
                         break;
                     }
 
-                    //muestrar las salas disponibles
+                    //mostrar las salas disponibles
                     System.out.println("Salas disponibles:");
                     for (int i = 0; i < salas.size(); i++) {
                             System.out.println((i+1) + "." + salas.get(i).getNumero());
@@ -361,15 +361,15 @@ public class Main {
                     }
 
                     recaudaciones = cine1.obtenerRecaudacion();
-                    System.out.println("Recaudacion total del cine: " + recaudaciones);
+                    System.out.println("Recaudación total del cine: " + recaudaciones);
                     break;
 
                 case SALIR:
-                    System.out.println("Adios!");
+                    System.out.println("Adiós!");
                     break;
 
                 default:
-                    System.out.println("Opcion no valida");
+                    System.out.println("Opción no valida");
             }
         } while(option != 0);
     }

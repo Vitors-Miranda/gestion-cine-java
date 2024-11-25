@@ -40,27 +40,68 @@ public class Sesion {
         }
     };
 
+    private int distribuirButacas(int fila, int columnas, int asientosReservados, int cantidad, ArrayList<Entrada> entradas) {
+        int centro = columnas / 2; // Índice central de la fila
+
+        // Buscar desde el centro hacia los extremos
+        for (int despl = 0; despl <= centro && asientosReservados < cantidad; despl++) {
+            int izquierda = centro - despl;
+            int derecha = centro + despl;
+
+            if (izquierda >= 0 && !asientos[fila][izquierda]) { // Reservar en el lado izquierdo
+                asientos[fila][izquierda] = true;
+                entradas.add(new Entrada(this, fila, izquierda));
+                asientosReservados++;
+            }
+            if (derecha < columnas && izquierda != derecha && !asientos[fila][derecha]) { // Reservar en el lado derecho
+                asientos[fila][derecha] = true;
+                entradas.add(new Entrada(this, fila, derecha));
+                asientosReservados++;
+            }
+        }
+
+        return asientosReservados;
+    }
+
     public ArrayList<Entrada> reservarEntradas(int cantidad){
         ArrayList<Entrada> entradas = new ArrayList<>();
         int filas = asientos.length;
         int columnas = asientos[0].length;
-        //Busco la fila más central con asientos disponibles consecutivos
-        for (int i = filas/2; i >=0 ; i--) {
-            entradas = reservarConsecutivos(i,cantidad);
-            if (!entradas.isEmpty()){
-                return entradas;
+
+        //Primero intento reservar bloques consecutivos priorizando filas y butacas centrales
+        for (int i = filas / 2; i >= 0; i--) { // Buscar en filas cercanas al centro hacia arriba
+            ArrayList<Entrada> consecutivos = reservarConsecutivos(i, cantidad);
+            if (!consecutivos.isEmpty()) {
+                return consecutivos; // Si encontramos un bloque consecutivo, devolvemos las entradas
             }
         }
-        for (int i = (filas/2)+1; i < filas ;i++) {
-            entradas = reservarConsecutivos(i,cantidad);
-            if (!entradas.isEmpty()){
-                return entradas;
+        for (int i = (filas / 2) + 1; i < filas; i++) { // Buscar en filas cercanas al centro hacia abajo
+            ArrayList<Entrada> consecutivos = reservarConsecutivos(i, cantidad);
+            if (!consecutivos.isEmpty()) {
+                return consecutivos; // Si encontramos un bloque consecutivo, devolvemos las entradas
             }
+        }
+        // Luego, procedo a asignar asientos distribuidos priorizando butacas centrales
+        int asientosReservados = 0;
+        for (int i = filas / 2; i >= 0 && asientosReservados < cantidad; i--) { // Filas desde el centro hacia arriba
+            asientosReservados = distribuirButacas(i, columnas, asientosReservados, cantidad, entradas);
+
+        }
+        for (int i = (filas / 2) + 1; i < filas && asientosReservados < cantidad; i++) { // Filas desde el centro hacia abajo
+            asientosReservados = distribuirButacas(i, columnas, asientosReservados, cantidad, entradas);
+
+        }
+        // Verificar si se pudieron reservar todas las entradas solicitadas
+        if (asientosReservados < cantidad) {
+            System.out.println("No se pudieron reservar todas las entradas solicitadas.");
+            return new ArrayList<>(); // Devolver lista vacía si no se completó la reserva
         }
 
-        //Si no, no hay asientos disponibles
-        return new ArrayList<Entrada>();
+        recaudacion += asientosReservados * precio; // Actualizar recaudación
+        return entradas;
+
     };
+
     public float getPrecio(){
         return this.precio;
     }
