@@ -1,3 +1,10 @@
+/*
+Práctica 2
+Autores: Vitor Samuel Miranda de Souza
+Autores: Pedro Lima Silva
+GITHUB: https://github.com/Vitors-Miranda/gestion-cine-java
+*/
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -49,7 +56,8 @@ public class Main {
         }
         return number;
     }
-    //estado de la sesion
+
+    //muestrar el estado de la sesion
     public static int estadoSesion(Scanner scanner, Cine cine1, ArrayList<Sesion> sesiones, ArrayList<Sala> salas){
         int nSesion, asientosLibres;
         float ocupacion;
@@ -97,6 +105,7 @@ public class Main {
 
         return nSesion ;
     }
+
     //Genero control de errores
     public static String checkGender(Scanner scanner, String[] movieGender){
         int index = -1;
@@ -122,6 +131,7 @@ public class Main {
         }
         return movieGender[index];
     }
+
     //String control de errores
     public static String stringCheck(String question, Scanner scanner) {
         String text = null;
@@ -136,7 +146,7 @@ public class Main {
 
         return text;
     }
-    //LocalTime
+    //LocalTime Control de Errores
     public static LocalTime localTimeCheck(LocalTime HoraSesion, Scanner scanner, DateTimeFormatter formatter) {
         while (HoraSesion == null) {
             try {
@@ -215,7 +225,7 @@ public class Main {
                 case ANADIR:
                     salas = cine1.getSalas(true);
 
-                    if (salas.size() == 0) {// no hay salas libres
+                    if (salas.isEmpty()) {// no hay salas libres
                         System.out.println("No hay salas disponibles");
                         break;
                     }
@@ -246,7 +256,7 @@ public class Main {
                 case ELIMINAR:
                     salas = cine1.getSalas(false);
 
-                    if (salas.size() == 0) {// no hay peliculas registradas
+                    if (salas.isEmpty()) {// no hay peliculas registradas
                         System.out.println("No hay salas con peliculas");
                         break;
                     }
@@ -266,7 +276,7 @@ public class Main {
                 case CREAR:
                     salas = cine1.getSalas(false);
 
-                    if (salas.size() == 0) { // no hay salas disponibles
+                    if (salas.isEmpty()) { // no hay salas disponibles
                         System.out.println("No hay salas con peliculas.");
                         break;
                     }
@@ -293,7 +303,12 @@ public class Main {
 
                     break;
                 case MOSTRAR:
-                    estadoSesion(scanner, cine1, sesiones, salas);
+                    nSesion = estadoSesion(scanner, cine1, sesiones, salas);
+
+                    if (nSesion < 0){
+                        System.out.println("No hay sesiones disponibles");
+                        break;
+                    }
                     break;
 
                 case COMPRAR:
@@ -334,7 +349,7 @@ public class Main {
                 case RECAUDACION:
 
                     sesiones = cine1.getSesiones();
-                    if (sesiones.size() == 0) { //no hay sesiones
+                    if (sesiones.isEmpty()) { //no hay sesiones
                         System.out.println("No hay sesiones disponibles");
                         break;
                     }
