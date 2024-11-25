@@ -97,7 +97,7 @@ public class Main {
         asientosLibres = sesiones.get(nSesion).obtenerAsientosLibres();
         ocupacion = sesiones.get(nSesion).obtenerPorcentajeOcupacion();
         System.out.println("Asientos Libres: " + asientosLibres);
-        System.out.println("Porcentaje de Ocupacion: " + ocupacion);
+        System.out.println("Porcentaje de Ocupacion: " + (int) ocupacion + "%");
         System.out.println("[ENTER] para continuar");
         scanner.nextLine();
         scanner.nextLine();
@@ -182,7 +182,7 @@ public class Main {
 
 
         //creando las salas
-        Sala sala1 = new Sala("Sala Comun 5", 21, 5);
+        Sala sala1 = new Sala("Sala Comun 5", 15, 5);
         Sala sala2 = new Sala("Sala VIP 10", 7, 4);
 
         //creando el cine y agregando las salas
