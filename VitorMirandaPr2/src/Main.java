@@ -62,7 +62,6 @@ public class Main {
         int nSesion, asientosLibres;
         float ocupacion;
 
-        sesiones = cine1.getSesiones();
         if (sesiones.size() == 0) {
             return -1;
         }
@@ -183,7 +182,7 @@ public class Main {
 
 
         //creando las salas
-        Sala sala1 = new Sala("Sala Comun 5", 5, 5);
+        Sala sala1 = new Sala("Sala Comun 5", 21, 5);
         Sala sala2 = new Sala("Sala VIP 10", 7, 4);
 
         //creando el cine y agregando las salas
@@ -304,6 +303,7 @@ public class Main {
 
                     break;
                 case MOSTRAR:
+                    sesiones = cine1.getSesiones();
                     nSesion = estadoSesion(scanner, cine1, sesiones, salas);
 
                     if (nSesion < 0){
@@ -313,28 +313,33 @@ public class Main {
                     break;
 
                 case COMPRAR:
+                    sesiones = cine1.getSesiones();
                     nSesion = estadoSesion(scanner, cine1,sesiones, salas);
 
                     if (nSesion < 0){
                         System.out.println("No hay sesiones disponibles");
                         break;
                     }
+                    int idSesion = sesiones.get(nSesion).getId();
                     int fila, butaca;
+
                     nEntradas = checkInteger(scanner, "Ingrese el número de entradas a comprar (máximo 5)", 5) +1;
-                    //Comprar única entrada
-                    if (nEntradas==1) {
+
+                    if(nEntradas > sesiones.get(nSesion).obtenerAsientosLibres()){
+                        System.out.println("La cantidad no es válida, asientos libres insuficientes.");
+                    } else if (nEntradas==1) { //Comprar única entrada
                         fila = checkInteger(scanner, "Ingrese la fila del asiento: ", 0);
                         butaca = checkInteger(scanner, "Ingrese el número de la butaca: ", 0);
 
-                        Entrada entrada = cine1.comprarEntrada(fila, butaca, nSesion);
+                        Entrada entrada = cine1.comprarEntrada(fila, butaca, idSesion);
                         if (entrada != null) {
                             System.out.println("Información de la entrada comprada: ");
                             System.out.println(entrada.obtenerInfo());
 
                         } else {
-                            System.out.println("No se pudo comprar la entrada");
+                            System.out.println("Asiento indisponible");
                         }
-                    } else {
+                    } else { //más de una entrada
                         ArrayList<Entrada> entradas = cine1.comprarEntradas(nEntradas, nSesion);
                         if (entradas.isEmpty()){
                             System.out.println("No fue possible comprar las entradas");

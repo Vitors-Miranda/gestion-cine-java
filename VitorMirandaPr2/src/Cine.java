@@ -38,11 +38,15 @@ public class Cine {
 
     }
     public  void EliminarPelicula(String nSala){
-        for (Sala sala : this.salas) {
+
+        for (Sala sala : this.salas) { //deletando la sala
             if (Objects.equals(sala.getNumero(), nSala)) {
                 sala.setPelicula(null);
             }
         }
+        
+        //deletando la sesion
+        this.sesiones.removeIf(sesion -> Objects.equals(sesion.getSala().getNumero(), nSala));
     }
     public ArrayList<Sesion> getSesiones(){
         return this.sesiones;
@@ -51,10 +55,10 @@ public class Cine {
     public  void CrearSession(float precio, LocalTime hora,  String nSala){
         int id = -1;
 
-        //P si ya hay una sesion en la sala
+        // si ya hay una sesion en la sala
         for (Sesion sesion : this.sesiones) {
             if (Objects.equals(sesion.getSala().getNumero(), nSala)){
-                this.sesiones.remove(sesion);
+                id = this.sesiones.indexOf(sesion);
             }
         }
 
@@ -62,16 +66,18 @@ public class Cine {
             if (Objects.equals(sala.getNumero(), nSala)) {
                 
                 Sesion sesion = new Sesion(precio, hora, sala, this.lastId);
-                this.sesiones.add(sesion);
-
-                this.lastId++;
+                if (id > -1){
+                    this.sesiones.set(id, sesion); //reemplazar
+                } else{
+                    this.sesiones.add(sesion); //añadir
+                    this.lastId++;
+                }
             }
         }
     }
     public  Entrada comprarEntrada(int fila,int butaca, int idSesion){
         for (Sesion sesion:sesiones){
-            if (sesion.getSala().equals(idSesion)){
-
+            if (sesion.getId() == idSesion){
                 //Intento reservar la entrada en la sesión
                 Entrada entrada = sesion.reservarEntrada(fila,butaca);
                 if (entrada!=null){
